@@ -6,6 +6,8 @@ import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentStatePagerAdapter;
 import androidx.viewpager.widget.ViewPager;
+import androidx.viewpager2.adapter.FragmentStateAdapter;
+import androidx.viewpager2.widget.ViewPager2;
 
 import android.content.Context;
 import android.content.Intent;
@@ -18,7 +20,7 @@ public class CrimePagerActivity extends AppCompatActivity {
 
     private static final String EXTRA_CTIME_ID = "com.bignerdranch.android.criminalintent3.crime_id";
 
-    private ViewPager mViewPager;
+    private ViewPager2 mViewPager;
     private List<Crime> mCrimes;
 
     public static Intent newIntent(Context packageContext, UUID crimeId) {
@@ -39,20 +41,20 @@ public class CrimePagerActivity extends AppCompatActivity {
 
         mCrimes = CrimeLab.get(this).getCrimes();
 
-        FragmentManager fragmentManager = getSupportFragmentManager();
-        mViewPager.setAdapter(new FragmentStatePagerAdapter(fragmentManager) {
+        mViewPager.setAdapter(new FragmentStateAdapter(this) {
             @NonNull
             @Override
-            public Fragment getItem(int position) {
+            public Fragment createFragment(int position) {
                 Crime crime = mCrimes.get(position);
                 return CrimeFragment.newInstance(crime.getId());
             }
 
             @Override
-            public int getCount() {
+            public int getItemCount() {
                 return mCrimes.size();
             }
         });
+
 
         for (int i = 0; i < mCrimes.size(); i++) {
             if (mCrimes.get(i).getId().equals(crimeId)) {
