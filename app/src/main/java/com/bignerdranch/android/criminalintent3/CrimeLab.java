@@ -10,6 +10,7 @@ import com.bignerdranch.android.criminalintent3.database.CrimeCursorWrapper;
 import com.bignerdranch.android.criminalintent3.database.CrimeDBSchema;
 import com.bignerdranch.android.criminalintent3.database.CrimeDBSchema.CrimeTable;
 
+import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
@@ -80,6 +81,11 @@ public class CrimeLab {
         }
     }
 
+    public File getPhotoFile(Crime crime) {
+        File filesDir = mContext.getFilesDir();
+        return new File(filesDir, crime.getPhotoFilename());
+    }
+
     private CrimeCursorWrapper queryCrimes(String whereClause, String[] whereArgs) {
         Cursor cursor = mDatabase.query(
                 CrimeTable.NAME,
@@ -99,9 +105,8 @@ public class CrimeLab {
         contentValues.put(CrimeTable.Cols.TITLE, crime.getTitle());
         contentValues.put(CrimeTable.Cols.DATE, crime.getDate().getTime());
         contentValues.put(CrimeTable.Cols.SOLVED, crime.isSolved() ? 1 : 0);
+        contentValues.put(CrimeTable.Cols.SUSPECT, crime.getSuspect());
         return contentValues;
     }
-
-
 
 }
